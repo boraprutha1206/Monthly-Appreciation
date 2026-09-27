@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lioness Letters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;600;700;800&family=Nanum+Pen+Script&display=swap">
+<style>
+@property --bg1{syntax:"<color>";inherits:true;initial-value:#2350D9}
+@property --bg2{syntax:"<color>";inherits:true;initial-value:#4C8DFF}
+@property --bg3{syntax:"<color>";inherits:true;initial-value:#A8D1FF}
+:root{
+  color-scheme:light;
+  --bg1:#2350D9; --bg2:#4C8DFF; --bg3:#A8D1FF;
+  --ink:#0B1D4D; --ink-soft:#4A5A8A; --white:#FFFFFF;
+  --glass:rgba(255,255,255,.8); --glass-line:rgba(255,255,255,.95);
+  --accent:#1D3FD0; --tint:#C9F27B;
+  --serif:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --hand:"Nanum Pen Script","Segoe Print","Comic Sans MS",cursive;
+  --top:calc(64px + env(safe-area-inset-top,0px));
+  --bottom:calc(78px + env(safe-area-inset-bottom,0px));
+}
+html,body{height:100%;overflow:hidden}
+body{margin:0;font-family:var(--sans);font-size:16px;line-height:1.45;color:var(--white);-webkit-font-smoothing:antialiased;
+  background:linear-gradient(170deg,var(--bg1) 0%,var(--bg2) 55%,var(--bg3) 100%);
+  transition:--bg1 1.2s ease,--bg2 1.2s ease,--bg3 1.2s ease}
+button{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.sr{position:absolute;left:-9999px}
+
+/* ---------- lively sky ---------- */
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none}
+.clouds{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cloud{position:absolute;border-radius:50%;background:#fff;filter:blur(40px);opacity:.35;animation:drift linear infinite}
+.cloud:nth-child(1){width:420px;height:160px;top:8%;left:-30%;animation-duration:70s}
+.cloud:nth-child(2){width:320px;height:120px;top:55%;left:-25%;animation-duration:90s;animation-delay:-40s;opacity:.28}
+.cloud:nth-child(3){width:520px;height:180px;top:78%;left:-40%;animation-duration:110s;animation-delay:-70s;opacity:.3}
+.cloud:nth-child(4){width:260px;height:100px;top:30%;left:-20%;animation-duration:60s;animation-delay:-20s;opacity:.25}
+@keyframes drift{to{transform:translateX(180vw)}}
+.floaty{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.floaty span{position:absolute;left:var(--x);top:var(--y);font-size:var(--s,26px);opacity:.5;animation:float var(--d,12s) ease-in-out infinite alternate;filter:drop-shadow(0 6px 10px rgba(10,30,110,.2))}
+@keyframes float{from{transform:translate(0,0) rotate(-12deg)}to{transform:translate(40px,-70px) rotate(14deg)}}
+
+/* ---------- bars ---------- */
+.topbar{position:fixed;left:0;right:0;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px}
+.chip{border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:9px 14px;font:800 12px var(--sans);letter-spacing:.08em;color:#fff;cursor:pointer}
+.brand{font:italic 600 18px var(--serif);text-shadow:0 2px 10px rgba(10,30,110,.3)}
+.hype{background:#fff;color:var(--ink);border-color:#fff}
+.navbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;justify-content:center;gap:14px;
+  padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px))}
+.navbtn{border:0;border-radius:999px;padding:12px 18px;font:800 14px var(--sans);cursor:pointer;background:rgba(255,255,255,.25);color:#fff;border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .15s}
+.navbtn.next{background:#fff;color:var(--ink)}
+.navbtn:active{transform:scale(.94)}
+.navbtn:disabled{opacity:.35}
+.dots{display:flex;gap:8px}
+.dots button{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:rgba(255,255,255,.45);cursor:pointer;transition:width .3s,background .3s}
+.dots button.on{width:26px;border-radius:6px;background:#fff}
+
+/* ---------- slides ---------- */
+#stage{position:fixed;inset:0;z-index:1}
+.slide{position:absolute;inset:0;padding:var(--top) 18px var(--bottom);display:flex;overflow-y:auto;overflow-x:hidden;
+  opacity:0;visibility:hidden;transform:translateX(70px) scale(.97);transition:opacity .55s ease,transform .65s cubic-bezier(.2,.9,.3,1),visibility .55s}
+.slide.before{transform:translateX(-70px) scale(.97)}
+.slide.active{opacity:1;visibility:visible;transform:none}
+.slide-body{width:100%;max-width:980px;margin:auto;position:relative}
+.slide.active .in{animation:rise .7s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--d,0) * 90ms)}
+@keyframes rise{from{opacity:0;transform:translateY(28px)}}
+.kicker{display:inline-block;font:800 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:7px 12px;margin:0 0 12px}
+.title{font:italic 500 clamp(36px,7vw,72px)/.95 var(--serif);margin:0;text-wrap:balance;text-shadow:0 4px 24px rgba(10,30,110,.25)}
+.title b{font-weight:800;font-style:normal;color:var(--ink);text-shadow:none}
+.sub{font:600 clamp(15px,2vw,18px)/1.35 var(--sans);margin:10px 0 22px;opacity:.95;text-shadow:0 1px 8px rgba(10,30,110,.3)}
+.center{text-align:center}
+.glass{background:var(--glass);color:var(--ink);border:1px solid var(--glass-line);border-radius:24px;box-shadow:0 20px 50px rgba(20,40,130,.25);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.btn{border:0;border-radius:14px;padding:12px 18px;background:var(--ink);color:#fff;font:800 14px var(--sans);cursor:pointer;transition:transform .15s}
+.btn:active{transform:scale(.95)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:8px 14px;text-decoration:none;color:#fff;background:var(--ink);font:800 13px var(--sans)}
+.muted{color:var(--ink-soft);margin:0;font-size:14px}
+
+/* ---------- gate ---------- */
+.gate{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding-inline:16px;
+  background:linear-gradient(170deg,var(--bg1),var(--bg2) 55%,var(--bg3));transition:opacity .8s ease,visibility .8s}
+.gate.gone{opacity:0;visibility:hidden}
+.gate-kicker{font:800 12px var(--sans);letter-spacing:.25em;text-transform:uppercase;margin:0;opacity:.9}
+.gate-title{font:italic 500 clamp(36px,8vw,58px)/1 var(--serif);margin:0;text-align:center;text-shadow:0 4px 24px rgba(10,30,110,.3)}
+.gate-title b{font-style:normal;font-weight:800;color:var(--ink);text-shadow:none}
+.env{position:relative;width:min(330px,82vw);aspect-ratio:3/2;perspective:900px;margin-top:36px;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-1deg)}}
+.env-back{position:absolute;inset:0;background:#DCE8FF;border-radius:12px;box-shadow:0 30px 60px rgba(10,30,110,.35)}
+.letter{position:absolute;left:6%;right:6%;top:8%;height:84%;background:#fff;color:var(--ink);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;z-index:1;transition:transform 1s cubic-bezier(.2,.8,.2,1) .4s}
+.letter-to{font:800 10px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.letter strong{font:italic 600 clamp(18px,4.6vw,22px)/1.15 var(--serif)}
+.env-pocket{position:absolute;inset:0;z-index:2;border-radius:12px;background:linear-gradient(160deg,#FFFFFF,#E7F0FF);clip-path:polygon(0 0,50% 54%,100% 0,100% 100%,0 100%)}
+.env-flap{position:absolute;left:0;right:0;top:0;height:62%;z-index:3;background:linear-gradient(180deg,#C9DBFF,#EEF4FF);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .6s ease,z-index 0s .3s}
+.env.open{animation:none}
+.env.open .env-flap{transform:rotateX(180deg);z-index:0}
+.env.open .letter{transform:translateY(-64%)}
+.seal{position:absolute;left:50%;top:62%;z-index:4;width:62px;height:62px;border-radius:50%;border:0;cursor:pointer;transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 35% 30%,#6F9BFF,#1D3FD0 60%,#132C9A);color:#fff;font:italic 700 28px var(--serif);
+  box-shadow:0 0 0 6px rgba(255,255,255,.5),0 10px 24px rgba(10,30,110,.4);animation:pulse 1.8s ease-in-out infinite;transition:transform .4s,opacity .4s}
+.env.open .seal{transform:translate(-50%,-50%) scale(0);opacity:0}
+@keyframes pulse{50%{box-shadow:0 0 0 14px rgba(255,255,255,.15),0 10px 24px rgba(10,30,110,.4)}}
+.gate-hint{font-family:var(--hand);font-size:30px;margin:0}
+
+/* ---------- 01 delivery ---------- */
+.masthead{font:italic 500 clamp(58px,15vw,150px)/.86 var(--serif);margin:4px 0 0;letter-spacing:-.02em;text-shadow:0 6px 30px rgba(10,30,110,.25)}
+.masthead span{display:block}
+.masthead em{display:block;font-style:normal;font-weight:800;color:var(--ink);text-shadow:none}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 0;font:800 12px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.cover-line{font:italic 500 clamp(22px,3.8vw,38px)/1.1 var(--serif);margin:14px 0 0;max-width:22ch;text-wrap:balance}
+.cover-quote{font-family:var(--hand);font-size:clamp(26px,4vw,34px);margin:4px 0 0;color:var(--ink)}
+.past-note{max-width:420px;background:#fff;color:var(--ink);border-radius:8px;padding:12px 16px;margin-top:12px;transform:rotate(-1.5deg);box-shadow:0 14px 30px rgba(10,30,110,.25)}
+.past-note small{display:block;font:800 10px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.past-note p{font-family:var(--hand);font-size:24px;line-height:1.05;margin:4px 0 0}
+.go-row{display:flex;gap:12px;align-items:center;margin-top:20px;flex-wrap:wrap}
+.peek{background:none;border:0;cursor:pointer;font-size:34px;animation:peek 3s ease-in-out infinite}
+@keyframes peek{0%,70%,100%{transform:translateY(0)}80%{transform:translateY(-10px) rotate(-8deg)}}
+
+/* ---------- 02 mood ---------- */
+.dial{display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:". t ." "l k r" ". b .";gap:12px;align-items:center;justify-items:center;max-width:600px;margin-inline:auto}
+.mood{display:flex;flex-direction:column;align-items:center;gap:1px;padding:10px 14px;border-radius:18px;border:1px solid var(--glass-line);background:var(--glass);color:var(--ink);cursor:pointer;max-width:170px;text-align:center;box-shadow:0 10px 24px rgba(10,30,110,.18);transition:transform .2s,box-shadow .3s,background .3s}
+.mood:hover{transform:translateY(-3px)}
+.mood[data-mood=radiant]{grid-area:t}.mood[data-mood=relentless]{grid-area:r}.mood[data-mood=ravenous]{grid-area:b}.mood[data-mood=recharging]{grid-area:l}
+.m-emoji{font-size:26px;line-height:1.1}
+.m-name{font:italic 700 19px/1.1 var(--serif)}
+.m-desc{font-size:11px;color:var(--ink-soft);line-height:1.3}
+.mood.active{background:var(--ink);color:#fff;transform:scale(1.06)}
+.mood.active .m-desc{color:rgba(255,255,255,.75)}
+.knob{grid-area:k;position:relative;width:clamp(104px,26vw,160px);aspect-ratio:1;border-radius:50%;margin:10px;
+  background:radial-gradient(circle at 35% 30%,#fff,#DCE8FF 70%);box-shadow:0 0 0 10px rgba(255,255,255,.25),0 18px 40px rgba(10,30,110,.3)}
+.knob::before{content:"";position:absolute;inset:-18px;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.8) 0 1.4deg,transparent 1.4deg 15deg);
+  -webkit-mask:radial-gradient(circle,transparent 66%,#000 67%);mask:radial-gradient(circle,transparent 66%,#000 67%)}
+.needle{position:absolute;left:50%;top:50%;width:6px;height:44%;margin-left:-3px;border-radius:3px;background:linear-gradient(var(--accent),rgba(29,63,208,0));transform-origin:50% 0;transform:rotate(var(--deg,180deg));transition:transform .8s cubic-bezier(.3,1.5,.5,1)}
+.knob-cap{position:absolute;inset:32%;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:clamp(20px,5vw,28px);box-shadow:0 4px 12px rgba(10,30,110,.25)}
+.mood-line{text-align:center;font:italic 600 clamp(22px,3.6vw,32px)/1.15 var(--serif);margin:24px auto 0;max-width:24ch;text-wrap:balance;min-height:2.2em;text-shadow:0 2px 14px rgba(10,30,110,.3)}
+.mood-line small{display:block;font:600 15px var(--sans);margin-top:6px;opacity:.9}
+
+/* ---------- 03 evidence ---------- */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:560px;margin-inline:auto;position:relative}
+.tile-ex{aspect-ratio:1;max-width:100%;border-radius:22px;border:1px solid var(--glass-line);background:var(--glass);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  box-shadow:0 12px 30px rgba(10,30,110,.2);transition:transform .25s cubic-bezier(.3,1.6,.5,1),background .3s}
+.tile-ex:hover{transform:translateY(-4px) rotate(-2deg)}
+.tile-ex .l{font:italic 700 clamp(40px,9vw,64px)/1 var(--serif)}
+.tile-ex .s{font:800 10px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.tile-ex.opened{background:var(--ink);color:#fff}
+.tile-ex.opened .s{color:rgba(255,255,255,.7)}
+.stamp{position:absolute;left:50%;top:50%;z-index:5;pointer-events:none;font:800 clamp(24px,6vw,46px)/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#E8264B;border:5px double #E8264B;border-radius:10px;padding:10px 18px;background:rgba(255,255,255,.92);transform:translate(-50%,-50%) rotate(-12deg);white-space:nowrap}
+.stamp.slam{animation:slam .45s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes slam{from{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scale(2.6)}to{opacity:1;transform:translate(-50%,-50%) rotate(-12deg) scale(1)}}
+.reveal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:rgba(15,35,120,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;perspective:1000px;border:0;width:100%;cursor:pointer}
+.reveal.show{opacity:1;visibility:visible}
+.reveal-card{background:#fff;color:var(--ink);border-radius:26px;padding:30px 26px;max-width:380px;width:100%;text-align:center;box-shadow:0 30px 70px rgba(10,30,110,.4);transform:rotateY(90deg) scale(.8);transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.reveal.show .reveal-card{transform:none}
+.reveal-card small{display:block;font:800 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.reveal-card .big{display:block;font:italic 700 56px/1 var(--serif);color:var(--accent);margin:4px 0 10px}
+.reveal-card p{font-family:var(--hand);font-size:32px;line-height:1.05;margin:0}
+.reveal-card .close{display:block;margin-top:16px;font-size:12px;color:var(--ink-soft)}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.tab{border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.22);color:#fff;border-radius:999px;padding:9px 16px;font:800 13px var(--sans);cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.tab[aria-selected=true]{background:#fff;color:var(--ink)}
+.cab{max-width:460px;margin-inline:auto;padding:22px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;min-height:300px;justify-content:center}
+.cab h3{font:italic 700 26px/1 var(--serif);margin:0}
+.cab.pop-in{animation:popin .45s cubic-bezier(.3,1.5,.5,1)}
+@keyframes popin{from{transform:scale(.9);opacity:0}}
+
+/* ---------- 04 arcade ---------- */
+.bulbs{display:flex;gap:9px}
+.bulbs i{width:9px;height:9px;border-radius:50%;background:#FFC53D;box-shadow:0 0 10px #FFC53D;animation:blink 1.1s infinite}
+.bulbs i:nth-child(2n){animation-delay:.55s}
+@keyframes blink{50%{opacity:.25}}
+.reel{width:100%;min-height:96px;display:grid;place-items:center;padding:12px;border-radius:16px;background:var(--ink);color:#fff;box-shadow:inset 0 0 20px rgba(0,0,0,.5)}
+.reel-text{font:italic 600 clamp(17px,2.4vw,21px)/1.2 var(--serif);text-wrap:balance}
+.reel.spin .reel-text{filter:blur(1.5px);opacity:.7}
+.trophy{font-size:38px;line-height:1}
+.trophy.pop{animation:pop .6s cubic-bezier(.3,1.8,.5,1)}
+@keyframes pop{from{transform:scale(.3) rotate(-20deg)}}
+.lever{border:0;border-radius:999px;padding:13px 30px;cursor:pointer;background:linear-gradient(180deg,#FFD66B,#F0A824);color:#3a2500;font:800 14px var(--sans);letter-spacing:.16em;box-shadow:0 6px 0 #B37612;transition:transform .08s,box-shadow .08s}
+.lever:active{transform:translateY(5px);box-shadow:0 1px 0 #B37612}
+.cookie{position:relative;width:160px;height:120px;background:none;border:0;cursor:pointer;font-size:98px;line-height:1}
+.half{position:absolute;inset:0;display:grid;place-items:center;transition:transform .8s cubic-bezier(.2,1,.3,1.3)}
+.half.l{clip-path:inset(0 50% 0 0)}.half.r{clip-path:inset(0 0 0 50%)}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:rotate(-9deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(4deg)}}
+.cookie.cracked .l{transform:translate(-40px,12px) rotate(-30deg)}
+.cookie.cracked .r{transform:translate(40px,12px) rotate(30deg)}
+.hint{font-family:var(--hand);font-size:26px;color:var(--accent);margin:0;min-height:1.1em}
+.slip{background:#FFFDF5;color:var(--ink);font-family:var(--hand);font-size:25px;line-height:1.05;padding:12px 18px;border-radius:4px;transform:scaleX(0);transition:transform .6s cubic-bezier(.2,1,.3,1) .3s;box-shadow:0 8px 20px rgba(10,30,110,.2);margin:0}
+.slip.show{transform:scaleX(1)}
+.dnp-wrap{position:relative;display:grid;place-items:center;width:150px;height:150px}
+.dnp{width:128px;aspect-ratio:1;border-radius:50%;border:0;cursor:pointer;color:#fff;font:800 13px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;
+  background:radial-gradient(circle at 35% 30%,#ff8595,#E8264B 60%,#a3162c);box-shadow:0 10px 0 #7a0f22,0 22px 40px rgba(10,30,110,.35);transition:transform .08s,box-shadow .08s}
+.dnp:active{transform:translateY(8px);box-shadow:0 2px 0 #7a0f22,0 10px 20px rgba(10,30,110,.3)}
+.bandage{position:absolute;top:16px;right:4px;font-size:34px;transform:rotate(25deg);pointer-events:none}
+.dnp-out{font:italic 600 20px/1.2 var(--serif);margin:0;min-height:2.6em;text-wrap:balance}
+
+/* ---------- 05 documented ---------- */
+.doc{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center}
+.polaroid{flex:none;background:#fff;color:var(--ink);padding:10px 10px 14px;width:clamp(148px,40vw,260px);box-shadow:0 24px 50px rgba(10,30,110,.35);position:relative;border:0;cursor:pointer;text-align:center;transform:rotate(-3deg);transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
+.polaroid:hover{transform:rotate(1deg) scale(1.03)}
+.polaroid.flip{animation:flipnext .5s ease}
+@keyframes flipnext{50%{transform:rotateY(90deg) rotate(-3deg)}}
+.polaroid::before{content:"";position:absolute;top:-11px;left:50%;width:80px;height:24px;margin-left:-40px;background:rgba(168,209,255,.8);transform:rotate(-4deg)}
+.photo{display:grid;place-items:center;aspect-ratio:1;max-width:100%;font-size:clamp(56px,14vw,88px);overflow:hidden;background:radial-gradient(circle at 50% 38%,#A8D1FF,#2350D9 80%);transition:filter 2.4s ease}
+.photo img{width:100%;height:100%;object-fit:cover}
+.undeveloped .photo{filter:brightness(.1) saturate(0) blur(3px)}
+.polaroid .cap{display:block;font-family:var(--hand);font-size:clamp(19px,3vw,24px);line-height:1;margin-top:10px;min-height:2em}
+.polaroid .count{position:absolute;top:14px;right:14px;background:#fff;color:var(--ink);font:800 10px var(--sans);padding:3px 7px;border-radius:999px}
+.song{flex:none;width:clamp(158px,44vw,320px);padding:18px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.vinyl{position:relative;width:clamp(104px,28vw,180px);aspect-ratio:1;border-radius:50%;border:0;cursor:pointer;
+  background:repeating-radial-gradient(circle,#0b0f24 0 2px,#1a2040 2px 4px);box-shadow:0 16px 36px rgba(10,30,110,.4)}
+.vinyl::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,transparent 0 40deg,rgba(255,255,255,.14) 55deg,transparent 70deg 210deg,rgba(255,255,255,.1) 225deg,transparent 240deg)}
+.vinyl-label{position:absolute;inset:32%;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:800 8px/1.15 var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:6px;transition:background .6s}
+.vinyl.spinning{animation:spin 2.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.notes{position:absolute;inset:0;pointer-events:none}
+.song-title{font:italic 700 clamp(18px,2.6vw,26px)/1.1 var(--serif);margin:4px 0 0}
+.song-artist{margin:0;color:var(--ink-soft);font-weight:700;font-size:13px}
+.song-note{font-family:var(--hand);font-size:22px;color:var(--accent);margin:0;line-height:1}
+.links{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+
+/* ---------- 06 little things ---------- */
+.closer{font:italic 600 clamp(20px,3.2vw,30px)/1.1 var(--serif);margin:0 0 4px;text-shadow:0 2px 14px rgba(10,30,110,.3)}
+.closer b{font-style:normal;font-weight:800;color:var(--ink);text-shadow:none}
+.ps{font-family:var(--hand);font-size:24px;margin:0 0 10px;color:var(--ink)}
+.jar-row{display:flex;gap:16px;align-items:flex-end;width:100%;text-align:left}
+.jar{position:relative;width:130px;height:170px;flex:none;border:3px solid rgba(29,63,208,.35);border-top-width:0;border-radius:16px 16px 38px 38px;background:linear-gradient(90deg,rgba(168,209,255,.35),rgba(255,255,255,.2) 40%,rgba(168,209,255,.3));overflow:hidden}
+.jar-lid{position:absolute;top:0;left:0;right:0;height:13px;border-radius:6px;background:var(--accent)}
+.win{position:absolute;background:#fff;color:var(--ink);font:800 10px var(--sans);padding:4px 7px;border-radius:3px;max-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 2px 6px rgba(10,30,110,.25)}
+.win.drop{animation:drop .9s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes drop{from{transform:translateY(-220px) rotate(0)}}
+.jar-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.row-form{display:flex;gap:8px;flex-wrap:wrap}
+.field{flex:1;min-width:0;background:#fff;border:1px solid rgba(29,63,208,.25);border-radius:12px;padding:11px 12px;color:var(--ink);font:700 15px var(--sans)}
+textarea.field{min-height:96px;resize:none;font-family:var(--hand);font-size:23px;line-height:1.1;width:100%}
+.sealed{display:flex;gap:12px;align-items:center;background:rgba(168,209,255,.3);border:1px dashed rgba(29,63,208,.4);border-radius:14px;padding:12px;text-align:left}
+.wax{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;background:radial-gradient(circle at 35% 30%,#6F9BFF,#1D3FD0 60%,#132C9A);font:italic 700 20px var(--serif)}
+.last-month{font-size:13px;color:var(--ink-soft);margin:0}
+.last-month b{color:var(--ink)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;width:100%}
+.book{display:flex;flex-direction:column;gap:1px;text-align:left;padding:10px 12px;border-radius:14px;border:1px solid rgba(29,63,208,.18);border-top:4px solid var(--c);background:#fff;color:var(--ink);cursor:pointer;transition:transform .2s}
+.book:hover:not(:disabled){transform:translateY(-3px)}
+.book:disabled{cursor:not-allowed;opacity:.5}
+.book[aria-current=true]{background:var(--ink);color:#fff}
+.b-no{font:800 10px var(--sans);letter-spacing:.16em;text-transform:uppercase;opacity:.7}
+.b-month{font:italic 700 18px/1.1 var(--serif)}
+.b-state{font-size:11px;opacity:.75}
+.countdown{font-family:var(--hand);font-size:24px;color:var(--accent);margin:0}
+
+/* ---------- surprises ---------- */
+.gem{position:absolute;z-index:3;background:none;border:0;cursor:pointer;font-size:20px;padding:8px;opacity:.7;animation:twinkle 2.6s ease-in-out infinite;transition:opacity .4s,transform .4s}
+.gem.found{animation:none;opacity:0;transform:scale(2.4);pointer-events:none}
+@keyframes twinkle{50%{opacity:1;transform:scale(1.2);filter:drop-shadow(0 0 8px #fff)}}
+.toast{position:fixed;left:16px;right:16px;margin-inline:auto;max-width:400px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:65;background:#fff;color:var(--ink);border-radius:18px;padding:14px 18px;font:italic 600 18px/1.25 var(--serif);box-shadow:0 20px 50px rgba(10,30,110,.35);transform:translateY(20px) scale(.95);opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.3,1.5,.5,1),opacity .3s}
+.toast small{display:block;font:800 10px var(--sans);font-style:normal;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
+.toast.show{transform:none;opacity:1}
+.spark{position:fixed;z-index:80;pointer-events:none;font-size:16px;line-height:1}
+.conf{position:fixed;z-index:70;width:8px;height:12px;border-radius:2px;pointer-events:none}
+.paw{position:fixed;z-index:40;pointer-events:none;font-size:14px;opacity:.8;transition:opacity 1.2s ease,transform 1.2s ease}
+.simba{position:fixed;bottom:calc(86px + env(safe-area-inset-bottom,0px));left:-120px;z-index:45;font-size:54px;pointer-events:none;animation:run 4.5s linear forwards}
+.simba span{position:absolute;bottom:62px;left:0;white-space:nowrap;background:#fff;color:var(--ink);font:800 13px var(--sans);padding:6px 10px;border-radius:10px}
+@keyframes run{to{transform:translateX(calc(100vw + 240px))}}
+
+@media (max-width:560px){
+  .brand{display:none}
+  .m-desc{display:none}
+  .m-name{font-size:16px}
+  .mood{padding:9px 10px}
+  .dial{gap:6px}
+  .tiles{gap:10px}
+  .cab{padding:18px 16px;min-height:280px}
+  .jar{width:110px;height:150px}
+  .row-form{flex-direction:column}
+  .navbtn{padding:11px 14px}
+}
+@media (max-height:640px){
+  .title{font-size:clamp(30px,6vw,52px)}
+  .sub{margin-bottom:14px}
+  .masthead{font-size:clamp(48px,12vw,110px)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="clouds" aria-hidden="true"><i class="cloud"></i><i class="cloud"></i><i class="cloud"></i><i class="cloud"></i></div>
+<div class="floaty" aria-hidden="true">
+  <span style="--x:5%;--y:18%;--d:11s">🥊</span><span style="--x:86%;--y:14%;--d:14s;--s:30px">🍣</span>
+  <span style="--x:80%;--y:66%;--d:13s">🐾</span><span style="--x:10%;--y:72%;--d:16s;--s:32px">🚲</span>
+  <span style="--x:48%;--y:9%;--d:15s;--s:22px">⚖️</span><span style="--x:62%;--y:84%;--d:12s">🏊‍♀️</span>
+  <span style="--x:28%;--y:42%;--d:18s;--s:20px">💙</span><span style="--x:93%;--y:40%;--d:17s;--s:24px">🦁</span>
+  <span style="--x:2%;--y:46%;--d:19s;--s:22px">🧘‍♀️</span><span style="--x:70%;--y:26%;--d:10s;--s:20px">✈️</span>
+  <span style="--x:38%;--y:80%;--d:14s;--s:18px">✨</span><span style="--x:56%;--y:52%;--d:20s;--s:18px">🤍</span>
+</div>
+
+<!-- Envelope gate -->
+<div class="gate" id="gate" role="dialog" aria-label="This month's letter">
+  <p class="gate-kicker"><span id="gNo">No. 01</span> · <span id="gMonth">September 2026</span></p>
+  <h1 class="gate-title">For the <b>Lioness</b></h1>
+  <div class="env" id="env">
+    <div class="env-back"></div>
+    <div class="letter"><span class="letter-to">Special delivery</span><strong id="gLine">For the main character.</strong></div>
+    <div class="env-pocket"></div>
+    <div class="env-flap"></div>
+    <button class="seal" id="seal" aria-label="Break the seal">R</button>
+  </div>
+  <p class="gate-hint">Break the seal, champ</p>
+</div>
+
+<header class="topbar">
+  <button type="button" class="chip" id="secretsChip">✦ Secrets <span id="secN">0</span>/<span id="secT">7</span></button>
+  <span class="brand" id="brand">Lioness Letters · No. 01</span>
+  <button type="button" class="chip hype" id="hypeBtn">🔥 Hype me</button>
+</header>
+
+<div id="stage">
+  <!-- 01 The Delivery -->
+  <section class="slide" aria-label="The Delivery">
+    <button type="button" class="gem" style="top:calc(var(--top) + 4%);right:8%" aria-label="A twinkling star">⭐</button>
+    <div class="slide-body">
+      <p class="kicker in">01 — The Delivery</p>
+      <h2 class="masthead in" style="--d:1"><span>Lioness</span><em>Letters</em></h2>
+      <p class="meta in" style="--d:2"><span id="cNo">No. 01</span><span id="cMonth">September 2026</span><span>For Ruch. Obviously.</span></p>
+      <p class="cover-line in" style="--d:3" id="cLine"></p>
+      <p class="cover-quote in" style="--d:4" id="cQuote"></p>
+      <div class="go-row in" style="--d:5">
+        <button type="button" class="btn" data-next>Let's go →</button>
+        <button type="button" class="peek" id="peek" aria-label="Simba is peeking. Tap him.">🐕</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 State of the Lioness -->
+  <section class="slide" aria-label="State of the Lioness">
+    <button type="button" class="gem" style="bottom:calc(var(--bottom) + 2%);left:5%" aria-label="A little heart">💙</button>
+    <div class="slide-body center">
+      <p class="kicker in">02 — Mood check</p>
+      <h2 class="title in" style="--d:1">State of the <b>Lioness</b></h2>
+      <p class="sub in" style="--d:2">Pick your energy. The whole sky follows.</p>
+      <div class="dial in" style="--d:3" role="group" aria-label="Pick this month's energy">
+        <button type="button" class="mood" data-mood="radiant"><span class="m-emoji">✨</span><span class="m-name">Radiant</span><span class="m-desc">Glowing. Unbothered.</span></button>
+        <button type="button" class="mood" data-mood="relentless"><span class="m-emoji">🥊</span><span class="m-name">Relentless</span><span class="m-desc">Fight-week energy.</span></button>
+        <button type="button" class="mood" data-mood="ravenous"><span class="m-emoji">🍣</span><span class="m-name">Ravenous</span><span class="m-desc">Mostly sushi.</span></button>
+        <button type="button" class="mood" data-mood="recharging"><span class="m-emoji">🌙</span><span class="m-name">Recharging</span><span class="m-desc">Lazy era. Earned.</span></button>
+        <div class="knob" aria-hidden="true"><div class="needle" id="needle"></div><span class="knob-cap" id="knobCap">🦁</span></div>
+      </div>
+      <p class="mood-line" id="moodLine" aria-live="polite">Whatever you pick, you still won.</p>
+    </div>
+  </section>
+
+  <!-- 03 The Evidence -->
+  <section class="slide" aria-label="The Evidence">
+    <button type="button" class="gem" style="top:calc(var(--top) + 2%);right:6%" aria-label="A paw print">🐾</button>
+    <div class="slide-body center">
+      <p class="kicker in">03 — The case file</p>
+      <h2 class="title in" style="--d:1">The <b>Evidence</b></h2>
+      <p class="sub in" style="--d:2">Six sealed exhibits. Open them all. The court has seen enough.</p>
+      <div class="tiles in" style="--d:3" id="tiles"></div>
+    </div>
+  </section>
+
+  <!-- 04 The Ruch Arcade -->
+  <section class="slide" aria-label="The Ruch Arcade">
+    <button type="button" class="gem" style="bottom:calc(var(--bottom) + 3%);right:7%" aria-label="A twinkling star">⭐</button>
+    <div class="slide-body center">
+      <p class="kicker in">04 — Insert coin</p>
+      <h2 class="title in" style="--d:1">The Ruch <b>Arcade</b></h2>
+      <p class="sub in" style="--d:2">Three games. Every one of them rigged in your favour.</p>
+      <div class="tabs in" style="--d:3" role="tablist" data-tabs="arcade">
+        <button type="button" class="tab" role="tab" aria-selected="true" data-tab="award">🏆 Awards</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-tab="cookie">🥠 Fortune</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-tab="dnp">🔴 Don't</button>
+      </div>
+      <div class="glass cab in" style="--d:4" data-panel="award">
+        <div class="bulbs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <h3>Award Machine</h3>
+        <div class="reel" id="reel"><span class="reel-text" id="reelText" aria-live="polite">Pull the lever. You can't lose.</span></div>
+        <span class="trophy" id="trophy" aria-hidden="true">🏆</span>
+        <button type="button" class="lever" id="lever">PULL</button>
+        <p class="muted" id="awardCount">Awards won: 0</p>
+      </div>
+      <div class="glass cab" data-panel="cookie" hidden>
+        <h3>Fortune Cookie</h3>
+        <button type="button" class="cookie" id="cookie" aria-label="Tap the fortune cookie"><span class="half l">🥠</span><span class="half r">🥠</span></button>
+        <p class="hint" id="cookieHint">Three jabs. Go.</p>
+        <p class="slip" id="slip" aria-live="polite"></p>
+      </div>
+      <div class="glass cab" data-panel="dnp" hidden>
+        <h3>Do Not Press</h3>
+        <div class="dnp-wrap"><button type="button" class="dnp" id="dnp">Do<br>not<br>press</button><span class="bandage" id="bandage" hidden>🩹</span></div>
+        <p class="dnp-out" id="dnpOut" aria-live="polite">Seriously. Don't.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 As Documented -->
+  <section class="slide" aria-label="As Documented">
+    <button type="button" class="gem" style="top:calc(var(--top) + 3%);left:5%" aria-label="A little heart">💙</button>
+    <div class="slide-body center">
+      <p class="kicker in">05 — Photos &amp; soundtrack</p>
+      <h2 class="title in" style="--d:1"><span id="docMonth">September</span>, <b>As Documented</b></h2>
+      <p class="sub in" style="--d:2">Tap the photo to develop it. Tap the record to spin it.</p>
+      <div class="doc in" style="--d:3">
+        <button type="button" class="polaroid undeveloped" id="polaroid" aria-label="Tap to develop the photo"><span class="photo" id="photo"></span><span class="cap" id="cap">Tap to develop</span><span class="count" id="pCount" hidden></span></button>
+        <div class="glass song">
+          <button type="button" class="vinyl" id="vinyl" aria-label="Spin the record"><span class="vinyl-label" id="vLabel">Tap to spin</span></button>
+          <p class="song-title" id="songTitle"></p>
+          <p class="song-artist" id="songArtist"></p>
+          <p class="song-note" id="songNote"></p>
+          <div class="links">
+            <a class="pill" id="spotify" target="_blank" rel="noopener">▶ Spotify</a>
+            <a class="pill" id="youtube" target="_blank" rel="noopener">▶ YouTube</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 The Little Things -->
+  <section class="slide" aria-label="The Little Things">
+    <button type="button" class="gem" style="top:calc(var(--top) + 2%);right:10%" aria-label="A paw print">🐾</button>
+    <button type="button" class="gem" style="bottom:calc(var(--bottom) + 2%);left:6%" aria-label="A tiny moon">🌙</button>
+    <div class="slide-body center">
+      <p class="kicker in">06 — Small but mighty</p>
+      <h2 class="title in" style="--d:1">The Little <b>Things</b></h2>
+      <p class="closer in" style="--d:2" id="closer"></p>
+      <p class="ps in" style="--d:2" id="ps" hidden></p>
+      <div class="tabs in" style="--d:3" role="tablist" data-tabs="little">
+        <button type="button" class="tab" role="tab" aria-selected="true" data-tab="jar">🫙 Wins jar</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-tab="shelf">📚 Shelf</button>
+      </div>
+      <div class="glass cab in" style="--d:4" data-panel="jar">
+        <div class="jar-row">
+          <div class="jar" id="jar"><div class="jar-lid"></div></div>
+          <div class="jar-side">
+            <p class="muted"><b>One word. One win.</b> Drop it in all month.</p>
+            <form class="row-form" id="winForm">
+              <label for="winInput" class="sr">Your win, in one word</label>
+              <input class="field" id="winInput" maxlength="18" placeholder="e.g. deadlift" autocomplete="off">
+              <button class="btn" type="submit">Drop it</button>
+            </form>
+            <p class="muted" id="jarCount"></p>
+            <a class="pill" id="brag" target="_blank" rel="noopener" hidden>Brag to him ↗</a>
+            <p class="last-month" id="lastMonth" hidden></p>
+          </div>
+        </div>
+      </div>
+      <div class="glass cab" data-panel="shelf" hidden>
+        <h3>The Shelf</h3>
+        <div class="shelf" id="shelf"></div>
+        <p class="countdown" id="countdown"></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<nav class="navbar" aria-label="Pages">
+  <button type="button" class="navbtn" id="prev" aria-label="Previous page">‹ Back</button>
+  <div class="dots" id="dots"></div>
+  <button type="button" class="navbtn next" id="next">Next ›</button>
+</nav>
+
+<button type="button" class="reveal" id="reveal" aria-label="Close"><span class="reveal-card"><small id="rvSmall">Exhibit</small><span class="big" id="rvBig">A</span><p id="rvText"></p><span class="close">Tap anywhere to close</span></span></button>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =====================================================================
+   EDIT HERE. One block per month; each unlocks on the 1st automatically.
+   Monthly effort:
+     photos:     add 0–3 image URLs, e.g. photos:["https://.../pic.jpg"]
+     insideJoke: optional one-liner, shows as a P.S. on the last page
+   Add "#preview" to the end of the link to see every issue early.
+   ===================================================================== */
+const ISSUES = [
+  { key:"2026-09", month:"September", year:2026, season:"fireflies", tint:"#C9F27B",
+    envelope:"For the main character.",
+    cover:"The one where it all begins.",
+    quote:"Special delivery. Signed, sealed, yours.",
+    compliments:[
+      "You throw punches for a living and still have the softest heart in the room.",
+      "High Court by day. Winning every argument with me by night. Unfair. Impressive.",
+      "Your discipline could coach an army. For now it coaches a whole gym.",
+      "You make 'rest day' look like a luxury brand.",
+      "Simba has a lioness for a mom. That explains the confidence.",
+      "You ragebait me like it's cardio. And I keep coming back for more."
+    ],
+    photos:[], photoEmoji:"🦁", photoCaption:"Exhibit G: the face that wins every argument.",
+    fortune:"This month, only a sushi craving can stop you. Briefly.",
+    song:{ title:"It's You", artist:"Ali Gatie", note:"Because obviously." },
+    closer:"Round one: <b>won.</b>", insideJoke:"" },
+
+  { key:"2026-10", month:"October", year:2026, season:"leaves", tint:"#FF9F43",
+    envelope:"Falling leaves. Never falling standards.",
+    cover:"Falling leaves. Rising Lioness.",
+    quote:"Autumn tried. You're still the warmest thing in it.",
+    compliments:[
+      "You don't have bad days. You have plot twists with great comebacks.",
+      "Your jab is fast. Your comebacks are faster.",
+      "You turned Pilates into a certificate and patience into a superpower.",
+      "You feed people nutrition advice and feed me attitude. Balanced diet.",
+      "Every cycle ride with you feels like a road trip.",
+      "Even your lazy days have main-character lighting."
+    ],
+    photos:[], photoEmoji:"🍂", photoCaption:"October's cover star. Undisputed.",
+    fortune:"A great month is coming. It already heard you're in it.",
+    song:{ title:"We Fell In Love In October", artist:"girl in red", note:"It's October. I'm not subtle." },
+    closer:"Two rounds. <b>Zero losses.</b>", insideJoke:"" },
+
+  { key:"2026-11", month:"November", year:2026, season:"sparks", tint:"#FFC857",
+    envelope:"Brighter than every diya this Diwali.",
+    cover:"Lights. Sweets. Lioness.",
+    quote:"Sorry, diyas. She's the main light this year.",
+    compliments:[
+      "You light up rooms faster than a Diwali sparkler.",
+      "You overrule my bad moods in seconds. Objection sustained, always.",
+      "Your clients get fitter. Your opponents get humbler.",
+      "You count macros and still make every sweet feel earned.",
+      "Simba guards the house. You guard everyone's heart.",
+      "Proof that strong and sweet can share one person."
+    ],
+    photos:[], photoEmoji:"🪔", photoCaption:"Brighter than the diyas. Sorry, diyas.",
+    fortune:"Your hard work is about to pay you back. With interest.",
+    song:{ title:"Earned It", artist:"The Weeknd", note:"Every single bit of it." },
+    closer:"Three rounds. <b>Still undefeated.</b>", insideJoke:"" },
+
+  { key:"2026-12", month:"December", year:2026, season:"snow", tint:"#BFE3FF",
+    envelope:"Cold outside. You're the warm part.",
+    cover:"The year's final round belongs to you.",
+    quote:"Year closed. Champion confirmed.",
+    compliments:[
+      "This year threw punches. You slipped every single one.",
+      "You made hard things look like a warm-up set.",
+      "Your year-end highlight reel needs a sequel. And a trailer.",
+      "You take care of everyone. This month, let everyone take care of you.",
+      "Of every place we've cycled to, you're still my favourite destination.",
+      "Santa checked twice. You're on both lists: nice and iconic."
+    ],
+    photos:[], photoEmoji:"❄️", photoCaption:"Winter's warmest exhibit.",
+    fortune:"Next year already booked you as the headliner.",
+    song:{ title:"A Thousand Years", artist:"Christina Perri", note:"And then a thousand more." },
+    closer:"Four rounds. <b>One champion.</b>", insideJoke:"" },
+
+  { key:"2027-01", month:"January", year:2027, season:"kites", tint:"#FF6B6B",
+    envelope:"New year. Same legend. Higher kite.",
+    cover:"New year. Same champion.",
+    quote:"Like an Uttarayan kite: only one direction. Up.",
+    compliments:[
+      "Resolutions are for people who aren't already you.",
+      "The only person who can deadlift and debate before lunch.",
+      "You coach people into believing in themselves. Take your own advice this year.",
+      "Your laugh is still my favourite sound. Last year and this one.",
+      "2027 plan: more trips, more sushi, more you.",
+      "Nobody's cutting your kite. They wouldn't dare."
+    ],
+    photos:[], photoEmoji:"🪁", photoCaption:"Cover of the year. Early prediction.",
+    fortune:"This is the year the world catches up with what I already know.",
+    song:{ title:"On Your Side", artist:"The Veronicas", note:"Always. No objection." },
+    closer:"Five rounds. <b>Same result.</b>", insideJoke:"" },
+
+  { key:"2027-02", month:"February", year:2027, season:"hearts", tint:"#FF8FB1",
+    envelope:"Love month. You were already my whole calendar.",
+    cover:"Valentine? Try lifetime.",
+    quote:"The month of love, starring the only one I'd cast.",
+    compliments:[
+      "You ragebait me with love. I still can't tell who's winning.",
+      "You beat me in arguments and somehow I end up saying thank you.",
+      "Your heart punches way above its weight class.",
+      "You turn ordinary Tuesdays into date nights.",
+      "Simba and I agree: you're the favourite. He still wants your socks.",
+      "If loving yourself were a sport, you'd be national level at that too."
+    ],
+    photos:[], photoEmoji:"💙", photoCaption:"Exhibit ♥: my favourite person.",
+    fortune:"Someone is thinking about you right now. (It's me. It's always me.)",
+    song:{ title:"Love Me Like You Do", artist:"Ellie Goulding", note:"The official soundtrack to you." },
+    closer:"Six rounds. <b>Heart: knocked out.</b>", insideJoke:"" },
+
+  { key:"2027-03", month:"March", year:2027, season:"holi", tint:"#E58BFF",
+    envelope:"Holi called. You're the brightest colour.",
+    cover:"Every colour. Still my favourite: you.",
+    quote:"Women's Day is one day. You're a whole calendar of strong.",
+    compliments:[
+      "You fight for clients in court and for titles in the ring. Undefeated in both.",
+      "People get stronger just standing next to you.",
+      "Blue, black, white, and now every Holi colour. All of it suits you.",
+      "Your dreams are big. Your work ethic is bigger.",
+      "You make being a lioness look easy. It isn't. You just are.",
+      "Seven letters in and I haven't run out of reasons. Not even close."
+    ],
+    photos:[], photoEmoji:"🎨", photoCaption:"Colour-coded: iconic.",
+    fortune:"Spring is here. So is your next big win.",
+    song:{ title:"Dandelions", artist:"Ruth B.", note:"Every wish, still you." },
+    closer:"Seven rounds. <b>The Lioness remains.</b>", insideJoke:"" }
+];
+
+const AWARDS = [
+  "Most Likely to Win an Argument She Started","Best Performance in a Leading Role: Every Room","Lifetime Achievement in Ragebaiting",
+  "Fastest Jab in Gujarat (Unofficial, Undisputed)","Supreme Court of Being Right","Best Nap in a Supporting Role",
+  "Sushi Consumption: Olympic Level","Simba's Favourite Human (Sorry, Everyone Else)","Most Iconic Walk Into a Gym",
+  "Excellence in Overruling Bad Moods","Strongest Core, Physically and Emotionally","Nutritionist Who Still Deserves Dessert",
+  "Gold Medal in Making Him Smile","Most Dangerous Eye-Roll","Chief Justice of Vibes",
+  "National Level Boxer, International Level Heart","Best Cycling Partner in the Known Universe","Most Likely to Be Right About This Too",
+  "Outstanding Achievement in Being Herself","Undisputed Champion of Comebacks","Best Laugh, All Categories",
+  "Most Travel Plans Made per Minute","The 'I Told You So' Hall of Fame","Coach of the Year, Every Year",
+  "Queen of Rest Days","Best Legal Argument for More Sushi","Strongest Swimmer in the Deep End of Life",
+  "Official Lioness of the Month","Grand Prize: Being Loved This Much"
+];
+const DNP = ["You had one job.","Classic ragebait behaviour.","Okay, now you're doing it just to annoy me.","Fine. You win. You always win.","Achievement unlocked: Professional Button Presser 🏆"];
+const DNP_MORE = ["Simba is watching. Simba is judging.","This button has filed a complaint in the High Court.","Objection! ...overruled. Keep pressing.",
+  "Still pressing? Iconic persistence.","The button needs a rest day. Coach's orders.","You'd make a great boxer. Oh wait.",
+  "At this point the button loves you too.","Reported to the Ministry of Ragebait."];
+const PEP = ["Legally, you are required to be proud of yourself today.","You've survived 100% of your worst days. Undefeated record.",
+  "Bad day? It picked the wrong lioness.","Objection: you're being too hard on yourself. Sustained.",
+  "Even your off days would be someone else's best day.","Simba believes in you. He's never wrong about snacks or people.",
+  "You've knocked out harder things than this Tuesday.","Breathe in: strength. Breathe out: doubt. Pilates-certified advice.",
+  "Your comeback is loading. Please don't close this tab.","Rest is training too. Coach's orders.",
+  "Go get sushi. Medical advice from a non-doctor.","You're the plot twist, not the problem.",
+  "Crown slipping? Adjust it. Keep walking.","National-level boxer vs. one bad day. Not a fair fight.",
+  "Somebody out there is ridiculously proud of you. Specifically me.","One bad round doesn't lose the fight.",
+  "You're allowed to rest. You're not allowed to quit.","Current status: temporarily grumpy, permanently amazing.",
+  "Ragebait me if it helps. Today, I'll allow it.","You carry a gym, a courtroom and my whole heart. Of course you're tired.",
+  "Nap first. Conquer later.","Hydrate. Stretch. Remember who you are."];
+const SECRETS = ["You found a star. Fitting. It found you back.","Secret: I smile at my phone every time you text. Every time.",
+  "Simba's official statement: 'Woof.' Translation: you're the best.","Hidden fact: you're the first person I want to tell good news to.",
+  "Classified: I lose our arguments on purpose. (No I don't. You're just better.)","Paw print detected. Simba was here. He says hi.",
+  "Moon secret: even at 2 a.m., you're my favourite thought."];
+const SURPRISES = ["Surprise! You're still the best thing on this screen.","Click detected. Iconic finger.",
+  "Fun fact: Simba thinks you're a snack dispenser. He's not wrong.","Random reminder: you're kind of a big deal.",
+  "This click has been donated to the Lioness Appreciation Fund.","Bonus compliment: your taste in people is excellent. (Me.)",
+  "Achievement: Curious Lioness.","Nothing here. Except more love than yesterday.",
+  "Knock knock. Who's there? The best advocate in Gujarat.","Warning: excessive cuteness detected at this location.",
+  "You tapped the sky. The sky blushed.","Free hug voucher. No expiry. Redeem anytime.",
+  "Sushi date voucher unlocked. Terms and conditions: none.","This spot is reserved for your next big win.",
+  "Ragebait detected. Forgiven in advance.","Keep tapping. The universe is enjoying the attention."];
+const POP_LINES = ["Pop! That bubble had a crush on you.","Pop! Bubble said: she's the one.","Pop! That's one less bubble, one more smile.","Pop! Knockout. Even the bubbles lose to you."];
+const CAPTIONS = ["Still iconic.","Zoom in. Yep, still perfect.","Certified cover material.","The court accepts this as evidence."];
+
+const MOODS = {
+  radiant:   { deg:180, emoji:"✨", accent:"#E09A12", sky:["#2F5BE0","#6FA3FF","#FFD9A0"], line:"You're not glowing. You're the light source." },
+  relentless:{ deg:270, emoji:"🥊", accent:"#1D3FD0", sky:["#0F3BD1","#2E6BFF","#6CC2FF"], line:"Rest when the belt's on." },
+  ravenous:  { deg:360, emoji:"🍣", accent:"#E4513E", sky:["#3559E0","#7F9CFF","#FFB8A8"], line:"Feed the lioness. Then world domination." },
+  recharging:{ deg:450, emoji:"🌙", accent:"#6A4FE8", sky:["#3A3FC4","#7C7CF2","#D2C4FF"], line:"Charging. Do not unplug the queen." }
+};
+const DEFAULT_SKY = ["#2350D9","#4C8DFF","#A8D1FF"];
+
+/* ============================ engine ============================ */
+const $ = s => document.querySelector(s);
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const pad = n => String(n).padStart(2,"0");
+const issueDate = i => { const [y,m] = i.key.split("-").map(Number); return new Date(y, m-1, 1); };
+const isPreview = () => location.hash === "#preview";
+const unlocked = i => isPreview() || new Date() >= issueDate(i);
+const latest = () => { const u = ISSUES.filter(unlocked); return u.length ? u[u.length-1] : ISSUES[0]; };
+const noOf = i => pad(ISSUES.indexOf(i) + 1);
+const shuffle = a => a.slice().sort(() => Math.random() - .5);
+const pick = a => a[Math.floor(Math.random()*a.length)];
+function bag(list){ let b = []; return () => { if (!b.length) b = shuffle(list); return b.pop(); }; }
+const nextPep = bag(PEP), nextSurprise = bag(SURPRISES), nextAward = bag(AWARDS), nextDnp = bag(DNP_MORE);
+let cur = latest();
+function vibrate(ms){ try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} }
+
+/* ---------- effects ---------- */
+function burst(x, y, n = 70){
+  if (reduceMotion) return;
+  const colors = ["#FFFFFF","#1D3FD0","#FFD66B","#A8D1FF","#0B1D4D", cur.tint];
+  for (let k = 0; k < n; k++){
+    const d = document.createElement("i");
+    d.className = "conf"; d.style.background = colors[k % colors.length];
+    d.style.left = x + "px"; d.style.top = y + "px";
+    document.body.appendChild(d);
+    const a = Math.random() * Math.PI * 2, v = 120 + Math.random() * 280;
+    d.animate([{ transform:"translate(0,0) rotate(0deg)", opacity:1 },
+      { transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v + 200}px) rotate(${Math.random()*720}deg)`, opacity:0 }],
+      { duration:1400 + Math.random()*900, easing:"cubic-bezier(.2,.7,.3,1)" }).onfinish = () => d.remove();
+  }
+}
+const SPARKS = ["💙","✨","🤍","⭐","🐾","💫"];
+function sparkle(x, y){
+  if (reduceMotion) return;
+  for (let k = 0; k < 7; k++){
+    const s = document.createElement("span"); s.className = "spark"; s.textContent = pick(SPARKS);
+    s.style.left = (x - 8) + "px"; s.style.top = (y - 8) + "px";
+    document.body.appendChild(s);
+    const a = (k / 7) * Math.PI * 2 + Math.random()*.5, v = 40 + Math.random()*50;
+    s.animate([{ transform:"translate(0,0) scale(.4)", opacity:1 },
+      { transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v - 20}px) scale(1)`, opacity:0 }],
+      { duration:700 + Math.random()*300, easing:"cubic-bezier(.2,.8,.3,1)" }).onfinish = () => s.remove();
+  }
+}
+let toastT;
+function toast(text, label){
+  const t = $("#toast"); t.textContent = "";
+  if (label){ const s = document.createElement("small"); s.textContent = label; t.appendChild(s); }
+  t.append(text); t.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 4200);
+}
+
+/* ---------- slides ---------- */
+const slides = [...document.querySelectorAll(".slide")];
+let slide = 0;
+slides.forEach((s, i) => {
+  const d = document.createElement("button"); d.type = "button"; d.setAttribute("aria-label", "Go to " + s.getAttribute("aria-label"));
+  d.addEventListener("click", () => go(i)); $("#dots").appendChild(d);
+});
+function go(n){
+  n = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, i) => {
+    const on = i === n;
+    s.classList.toggle("active", on); s.classList.toggle("before", i < n);
+    s.inert = !on; s.setAttribute("aria-hidden", !on);
+    if (on) s.scrollTop = 0;
+  });
+  [...$("#dots").children].forEach((d, i) => d.classList.toggle("on", i === n));
+  $("#prev").disabled = n === 0;
+  $("#next").textContent = n === slides.length - 1 ? "Start over ↺" : "Next ›";
+  slide = n;
+}
+$("#prev").addEventListener("click", () => go(slide - 1));
+$("#next").addEventListener("click", () => go(slide === slides.length - 1 ? 0 : slide + 1));
+document.querySelectorAll("[data-next]").forEach(b => b.addEventListener("click", () => go(slide + 1)));
+addEventListener("keydown", e => {
+  if (/INPUT|TEXTAREA/.test(e.target.tagName) || document.body.classList.contains("gated")) return;
+  if (e.key === "ArrowRight") go(slide + 1);
+  if (e.key === "ArrowLeft") go(slide - 1);
+});
+let sx = 0, sy = 0, st = 0;
+$("#stage").addEventListener("touchstart", e => { const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY; st = Date.now(); }, { passive:true });
+$("#stage").addEventListener("touchend", e => {
+  if (e.target.closest("textarea,input")) return;
+  const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+  if (Math.abs(dx) > 60 && Math.abs(dy) < 60 && Date.now() - st < 700) go(slide + (dx < 0 ? 1 : -1));
+}, { passive:true });
+
+/* ---------- tabs ---------- */
+document.querySelectorAll("[data-tabs]").forEach(group => {
+  const body = group.parentElement;
+  group.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+    group.querySelectorAll(".tab").forEach(o => o.setAttribute("aria-selected", o === t));
+    body.querySelectorAll("[data-panel]").forEach(p => {
+      const on = p.dataset.panel === t.dataset.tab; p.hidden = !on;
+      if (on){ p.classList.remove("pop-in","in"); void p.offsetWidth; p.classList.add("pop-in"); }
+    });
+  }));
+});
+
+/* ---------- 01 gate ---------- */
+function showGate(){
+  $("#gNo").textContent = "No. " + noOf(cur);
+  $("#gMonth").textContent = cur.month + " " + cur.year;
+  $("#gLine").textContent = cur.envelope;
+  $("#env").classList.remove("open");
+  $("#gate").classList.remove("gone");
+  document.body.classList.add("gated");
+}
+$("#seal").addEventListener("click", () => {
+  $("#env").classList.add("open"); vibrate(40);
+  setTimeout(() => {
+    $("#gate").classList.add("gone");
+    document.body.classList.remove("gated");
+    go(0);
+    burst(innerWidth/2, innerHeight*0.4, 120);
+  }, 1900);
+});
+const simbaLines = ["Simba approves this letter.","Simba says: treats for the champion.","Woof. (Translation: you're the best.)","Simba is on guard. Carry on being iconic."];
+function callSimba(){
+  if (document.querySelector(".simba")) return;
+  const s = document.createElement("div"); s.className = "simba"; s.textContent = "🐕";
+  const t = document.createElement("span"); t.textContent = pick(simbaLines); s.appendChild(t);
+  document.body.appendChild(s); vibrate([20,30,20]);
+  setTimeout(() => s.remove(), 4700);
+}
+$("#peek").addEventListener("click", callSimba);
+
+/* ---------- 02 mood ---------- */
+function setSky(c){ const r = document.documentElement.style; r.setProperty("--bg1", c[0]); r.setProperty("--bg2", c[1]); r.setProperty("--bg3", c[2]); }
+function setMood(key, save){
+  const m = MOODS[key];
+  document.querySelectorAll(".mood").forEach(b => { const on = b.dataset.mood === key; b.classList.toggle("active", on); b.setAttribute("aria-pressed", on); });
+  const line = $("#moodLine");
+  if (!m){ $("#needle").style.setProperty("--deg","180deg"); $("#knobCap").textContent = "🦁"; line.textContent = "Whatever you pick, you still won."; setSky(DEFAULT_SKY); document.documentElement.style.setProperty("--accent","#1D3FD0"); return; }
+  $("#needle").style.setProperty("--deg", m.deg + "deg");
+  $("#knobCap").textContent = m.emoji;
+  line.textContent = m.line;
+  const s = document.createElement("small"); s.textContent = "Whatever you picked, you still won."; line.appendChild(s);
+  setSky(m.sky); document.documentElement.style.setProperty("--accent", m.accent);
+  if (save){ store.set("ll-mood-" + cur.key, key); vibrate(20); const b = document.querySelector(`.mood[data-mood=${key}]`).getBoundingClientRect(); burst(b.left + b.width/2, b.top + b.height/2, 40); }
+}
+document.querySelectorAll(".mood").forEach(b => b.addEventListener("click", () => setMood(b.dataset.mood, true)));
+
+/* ---------- 03 evidence ---------- */
+let opened = new Set();
+function renderTiles(){
+  const box = $("#tiles"); box.innerHTML = ""; opened = new Set();
+  cur.compliments.forEach((c, i) => {
+    const L = "ABCDEF"[i], b = document.createElement("button");
+    b.type = "button"; b.className = "tile-ex";
+    b.setAttribute("aria-label", "Open exhibit " + L);
+    b.innerHTML = `<span class="s">Exhibit</span><span class="l">${L}</span><span class="s">Tap</span>`;
+    b.addEventListener("click", () => {
+      b.classList.add("opened"); b.lastElementChild.textContent = "Opened ✓";
+      $("#rvSmall").textContent = "Exhibit"; $("#rvBig").textContent = L; $("#rvText").textContent = c;
+      $("#reveal").classList.add("show"); vibrate(20);
+      opened.add(i);
+    });
+    box.appendChild(b);
+  });
+  const st = document.createElement("div"); st.className = "stamp"; st.id = "stamp"; st.hidden = true; st.textContent = "Case closed";
+  box.appendChild(st);
+}
+$("#reveal").addEventListener("click", () => {
+  $("#reveal").classList.remove("show");
+  if (opened.size === cur.compliments.length && $("#stamp").hidden){
+    setTimeout(() => {
+      const st = $("#stamp"); st.hidden = false; st.classList.add("slam"); vibrate([30,40,60]);
+      const r = st.getBoundingClientRect(); burst(r.left + r.width/2, r.top + r.height/2, 80);
+      toast("All six exhibits reviewed. Verdict: iconic.", "Case closed");
+    }, 350);
+  }
+});
+
+/* ---------- 04 arcade ---------- */
+let awardsWon = 0, spinning = false;
+$("#lever").addEventListener("click", () => {
+  if (spinning) return; spinning = true; vibrate(30);
+  const final = nextAward(), reel = $("#reel"), txt = $("#reelText");
+  reel.classList.add("spin");
+  let n = 0; const steps = reduceMotion ? 1 : 16;
+  (function tick(){
+    if (n++ < steps){ txt.textContent = pick(AWARDS); setTimeout(tick, 50 + n*9); return; }
+    reel.classList.remove("spin"); txt.textContent = final;
+    const tr = $("#trophy"); tr.classList.remove("pop"); void tr.offsetWidth; tr.classList.add("pop");
+    awardsWon++; $("#awardCount").textContent = "Awards won: " + awardsWon + (awardsWon >= 5 ? ". Trophy cabinet: full." : "");
+    const r = tr.getBoundingClientRect(); burst(r.left + r.width/2, r.top, 50); vibrate([20,30,50]);
+    spinning = false;
+  })();
+});
+let taps = 0;
+const hints = ["Three jabs. Go.", "Harder, champ.", "One more jab."];
+function resetCookie(){ taps = 0; $("#cookie").classList.remove("cracked"); $("#slip").classList.remove("show"); $("#slip").textContent = cur.fortune; $("#cookieHint").textContent = hints[0]; }
+$("#cookie").addEventListener("click", e => {
+  const c = $("#cookie"); if (c.classList.contains("cracked")) return;
+  taps++; vibrate(25);
+  c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
+  if (taps >= 3){ c.classList.add("cracked"); $("#slip").classList.add("show"); $("#cookieHint").textContent = "Knockout. Fortune unlocked."; burst(e.clientX, e.clientY, 50); }
+  else $("#cookieHint").textContent = hints[taps];
+});
+let presses = 0;
+$("#dnp").addEventListener("click", e => {
+  presses++; vibrate(35);
+  const w = $(".dnp-wrap"); w.classList.remove("shake"); void w.offsetWidth; w.classList.add("shake");
+  $("#dnpOut").textContent = presses <= DNP.length ? DNP[presses - 1] : nextDnp();
+  if (presses === DNP.length){ burst(e.clientX, e.clientY, 70); $("#bandage").hidden = false; }
+});
+
+/* ---------- 05 documented ---------- */
+let shot = 0, capN = 0;
+function shots(){ return cur.photos && cur.photos.length ? cur.photos.slice(0,3) : [null]; }
+function showShot(){
+  const src = shots()[shot], ph = $("#photo"); ph.innerHTML = "";
+  if (src){ const img = new Image(); img.src = src; img.alt = "Ruch, " + cur.month; ph.appendChild(img); }
+  else ph.textContent = cur.photoEmoji || "🦁";
+  $("#polaroid").classList.add("undeveloped"); $("#cap").textContent = "Tap to develop"; capN = 0;
+  const n = shots().length; $("#pCount").hidden = n < 2; $("#pCount").textContent = (shot + 1) + "/" + n;
+}
+$("#polaroid").addEventListener("click", () => {
+  const p = $("#polaroid"); vibrate(20);
+  if (p.classList.contains("undeveloped")){ p.classList.remove("undeveloped"); $("#cap").textContent = cur.photoCaption; return; }
+  if (shots().length > 1){ p.classList.remove("flip"); void p.offsetWidth; p.classList.add("flip"); setTimeout(() => { shot = (shot + 1) % shots().length; showShot(); }, 250); }
+  else { $("#cap").textContent = CAPTIONS[capN++ % CAPTIONS.length]; p.classList.remove("flip"); void p.offsetWidth; p.classList.add("flip"); }
+});
+function renderDoc(){
+  $("#docMonth").textContent = cur.month; shot = 0; showShot();
+  const s = cur.song, q = encodeURIComponent(s.title + " " + s.artist);
+  $("#songTitle").textContent = s.title; $("#songArtist").textContent = s.artist; $("#songNote").textContent = s.note;
+  $("#vLabel").textContent = "Tap to spin"; $("#vinyl").classList.remove("spinning");
+  $("#spotify").href = "https://open.spotify.com/search/" + q;
+  $("#youtube").href = "https://www.youtube.com/results?search_query=" + q;
+}
+let noteT;
+$("#vinyl").addEventListener("click", () => {
+  const v = $("#vinyl"); v.classList.toggle("spinning");
+  const on = v.classList.contains("spinning");
+  $("#vLabel").textContent = on ? cur.song.title : "Tap to spin";
+  clearInterval(noteT);
+  if (on && !reduceMotion){
+    noteT = setInterval(() => {
+      const r = v.getBoundingClientRect(), s = document.createElement("span");
+      s.className = "spark"; s.textContent = pick(["🎵","🎶","💙"]);
+      s.style.left = (r.right - 20) + "px"; s.style.top = (r.top + 10) + "px"; document.body.appendChild(s);
+      s.animate([{ transform:"translate(0,0)", opacity:1 }, { transform:`translate(${20 + Math.random()*30}px,-70px) rotate(20deg)`, opacity:0 }], { duration:1600 }).onfinish = () => s.remove();
+      if (slide !== 4){ clearInterval(noteT); }
+    }, 450);
+  }
+});
+
+/* ---------- 06 little things ---------- */
+const winsKey = i => "ll-wins-" + i.key;
+function addSlip(word, idx, animate){
+  const col = idx % 2, row = Math.floor(idx / 2), s = document.createElement("span");
+  s.className = "win" + (animate ? " drop" : ""); s.textContent = word;
+  s.style.left = (8 + col*44 + (idx*7) % 6) + "%"; s.style.bottom = (10 + row*24) + "px";
+  s.style.transform = `rotate(${((idx*47) % 26) - 13}deg)`;
+  $("#jar").appendChild(s);
+}
+function jarLabel(n){ return n ? `${n} win${n > 1 ? "s" : ""} this month. Keep stacking.` : "Empty jar. Not for long."; }
+function renderJar(){
+  const wins = store.get(winsKey(cur)) || [];
+  $("#jar").querySelectorAll(".win").forEach(n => n.remove());
+  wins.slice(-12).forEach((w, i) => addSlip(w, i, false));
+  $("#jarCount").textContent = jarLabel(wins.length);
+  const prev = ISSUES[ISSUES.indexOf(cur) - 1], pw = prev ? (store.get(winsKey(prev)) || []) : [], lm = $("#lastMonth");
+  lm.hidden = !pw.length;
+  if (pw.length){ lm.textContent = "Last month's jar: "; const b = document.createElement("b"); b.textContent = pw.join(" · "); lm.append(b); }
+  $("#brag").hidden = true;
+}
+$("#winForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const word = $("#winInput").value.trim().split(/\s+/)[0];
+  if (!word){ $("#winInput").focus(); return; }
+  const wins = store.get(winsKey(cur)) || []; wins.push(word); store.set(winsKey(cur), wins);
+  addSlip(word, Math.min(wins.length - 1, 11), true);
+  $("#winInput").value = ""; $("#jarCount").textContent = jarLabel(wins.length);
+  const brag = $("#brag"); brag.href = "https://wa.me/?text=" + encodeURIComponent(`New entry in my wins jar: ${word} 🏆`); brag.hidden = false;
+  vibrate(30); const r = $("#jar").getBoundingClientRect(); burst(r.left + r.width/2, r.top + 20, 40);
+  toast(pick(["Win recorded. Undefeated.","Into the jar it goes. Proud of you.","Another one. Obviously."]), "Wins jar");
+});
+function renderFinale(){
+  $("#closer").innerHTML = cur.closer;
+  const ps = $("#ps"); ps.hidden = !cur.insideJoke; ps.textContent = cur.insideJoke ? "P.S. " + cur.insideJoke : "";
+  const box = $("#shelf"); box.innerHTML = "";
+  ISSUES.forEach(i => {
+    const open = unlocked(i), b = document.createElement("button");
+    b.type = "button"; b.className = "book"; b.disabled = !open; b.style.setProperty("--c", i.tint);
+    b.setAttribute("aria-current", i === cur);
+    b.innerHTML = `<span class="b-no">No. ${noOf(i)}</span><span class="b-month">${i.month.slice(0,3)}</span><span class="b-state">${!open ? "🔒 1 " + i.month.slice(0,3) : i === cur ? "Reading" : "Re-read"}</span>`;
+    b.addEventListener("click", () => { if (i !== cur){ cur = i; renderIssue(); showGate(); } });
+    box.appendChild(b);
+  });
+  const next = ISSUES.find(i => !unlocked(i)), cd = $("#countdown");
+  if (!next) cd.textContent = "More letters are being written. Patience, champ.";
+  else { const d = Math.ceil((issueDate(next) - new Date()) / 864e5); cd.textContent = d <= 1 ? "Next letter opens tomorrow. Act surprised." : `Next letter opens in ${d} days. Act surprised.`; }
+}
+
+/* ---------- secrets ---------- */
+const gems = document.querySelectorAll(".gem");
+let found = 0;
+$("#secT").textContent = gems.length;
+gems.forEach((g, i) => g.addEventListener("click", e => {
+  if (g.classList.contains("found")) return;
+  g.classList.add("found"); found++; vibrate(25);
+  $("#secN").textContent = found;
+  burst(e.clientX, e.clientY, 40);
+  if (found === gems.length){ toast("You found every secret. Nothing gets past the Lioness.", "All secrets found"); burst(innerWidth/2, innerHeight/2, 160); }
+  else toast(SECRETS[i % SECRETS.length], "Secret " + found + " of " + gems.length);
+}));
+$("#secretsChip").addEventListener("click", () => toast(found === gems.length ? "All found. You're a legend." : `${gems.length - found} secrets still hidden. Look for twinkling hearts, stars and paws.`, "Secret hunt"));
+$("#hypeBtn").addEventListener("click", e => { toast(nextPep(), "Emergency hype"); vibrate(30); burst(e.clientX, e.clientY, 30); });
+
+/* ---------- every tap = a surprise ---------- */
+let bgTaps = 0;
+document.addEventListener("click", e => {
+  if (!e.clientX && !e.clientY) return;
+  sparkle(e.clientX, e.clientY);
+  if (document.body.classList.contains("gated")) return;
+  if (e.target.closest("button,a,input,textarea,label,.glass")) return;
+  if (popBubble(e.clientX, e.clientY)) return;
+  bgTaps++;
+  if (bgTaps % 2 === 1) toast(nextSurprise(), "Surprise");
+});
+let typed = "";
+addEventListener("keydown", e => {
+  if (/INPUT|TEXTAREA/.test(e.target.tagName)) return;
+  typed = (typed + e.key.toLowerCase()).slice(-7);
+  if (typed.endsWith("simba")) callSimba();
+  if (typed.endsWith("lioness")){ toast("ROAR. The Lioness has entered the chat.", "Easter egg"); burst(innerWidth/2, innerHeight/2, 120); }
+});
+let lx = 0, ly = 0;
+addEventListener("pointermove", e => {
+  if (reduceMotion || e.pointerType !== "mouse" || document.body.classList.contains("gated")) return;
+  if (Math.hypot(e.clientX - lx, e.clientY - ly) < 80) return;
+  lx = e.clientX; ly = e.clientY;
+  const p = document.createElement("span"); p.className = "paw"; p.textContent = "🐾";
+  p.style.left = (e.clientX - 7) + "px"; p.style.top = (e.clientY - 7) + "px";
+  p.style.transform = `rotate(${Math.random()*60-30}deg)`;
+  document.body.appendChild(p);
+  requestAnimationFrame(() => { p.style.opacity = 0; p.style.transform += " scale(.6)"; });
+  setTimeout(() => p.remove(), 1300);
+}, { passive:true });
+addEventListener("hashchange", () => { cur = latest(); renderIssue(); });
+
+/* ---------- sky: bubbles + seasonal particles ---------- */
+const cv = $("#sky"), ctx = cv.getContext("2d");
+let W, H, bubbles = [], parts = [], season = "fireflies";
+const COUNT = { fireflies:26, leaves:22, sparks:40, snow:70, kites:6, hearts:20, holi:12 };
+const KITE_C = ["#FF6B6B","#FFC857","#FFFFFF","#7CE0A3","#E58BFF","#0B1D4D"];
+const HOLI_C = ["255,77,166","255,200,60","80,220,140","255,255,255","255,140,60","190,110,255"];
+function newBubble(init){ const r = 6 + Math.random()*18; return { x:Math.random()*W, y:init ? Math.random()*H : H + r + 10, r, vy:.25 + Math.random()*.5, ph:Math.random()*6.3 }; }
+function resize(){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  bubbles = Array.from({ length: Math.max(10, Math.round(W * H / 38000)) }, () => newBubble(true));
+  if (reduceMotion) drawFrame(0);
+}
+function popBubble(x, y){
+  const i = bubbles.findIndex(b => Math.hypot(b.x - x, b.y - y) < b.r + 14);
+  if (i < 0) return false;
+  bubbles[i] = newBubble(false); burst(x, y, 24); vibrate(15);
+  toast(pick(POP_LINES), "Bubble popped");
+  return true;
+}
+function spawn(init){
+  const s = Math.random(), p = { s, ph:Math.random()*6.3, x:Math.random()*W, rot:Math.random()*6.3, vr:(Math.random()-.5)*.03 };
+  switch (season){
+    case "fireflies": p.y = Math.random()*H; p.vx = (Math.random()-.5)*.4; p.vy = (Math.random()-.5)*.4; p.r = 1.6 + s*2.2; break;
+    case "leaves": p.y = init ? Math.random()*H : -20; p.vy = .5 + s*.9; p.r = 7 + s*6; p.h = [22,30,14,38][Math.floor(Math.random()*4)]; break;
+    case "sparks": p.y = init ? Math.random()*H : H + 10; p.vy = -(.4 + s); p.r = 1 + s*2; p.life = init ? Math.random() : 1; break;
+    case "snow": p.y = init ? Math.random()*H : -10; p.vy = .4 + s*1.1; p.r = 1.2 + s*2.6; break;
+    case "kites": p.y = init ? Math.random()*H : H + 60; p.vy = -(.18 + s*.3); p.vx = (s > .5 ? .2 : -.2); p.r = 16 + s*14; p.c = pick(KITE_C); break;
+    case "hearts": p.y = init ? Math.random()*H : H + 20; p.vy = -(.3 + s*.5); p.r = 5 + s*7; p.c = Math.random() > .5 ? "255,143,177" : "255,255,255"; break;
+    case "holi": p.y = Math.random()*H; p.r = 10; p.life = init ? Math.random() : 1; p.c = pick(HOLI_C); break;
+  }
+  return p;
+}
+function setSeason(name){ season = name; parts = Array.from({ length: COUNT[name] || 0 }, () => spawn(true)); if (reduceMotion) drawFrame(0); }
+function heart(x, y, r){
+  ctx.beginPath(); ctx.moveTo(x, y + r*.3);
+  ctx.bezierCurveTo(x, y, x - r, y, x - r, y + r*.35);
+  ctx.bezierCurveTo(x - r, y + r*.8, x, y + r, x, y + r*1.3);
+  ctx.bezierCurveTo(x, y + r, x + r, y + r*.8, x + r, y + r*.35);
+  ctx.bezierCurveTo(x + r, y, x, y, x, y + r*.3); ctx.fill();
+}
+function drawFrame(t){
+  ctx.clearRect(0, 0, W, H);
+  bubbles.forEach((b, i) => {
+    if (!reduceMotion){ b.y -= b.vy; b.x += Math.sin(t/1500 + b.ph) * .3; if (b.y < -b.r - 10) bubbles[i] = newBubble(false); }
+    ctx.fillStyle = "rgba(255,255,255,.12)"; ctx.strokeStyle = "rgba(255,255,255,.55)"; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 6.3); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.7)"; ctx.beginPath(); ctx.arc(b.x - b.r*.35, b.y - b.r*.35, b.r*.18, 0, 6.3); ctx.fill();
+  });
+  if (reduceMotion) return;
+  parts.forEach((p, i) => {
+    switch (season){
+      case "fireflies": {
+        p.vx += (Math.random()-.5)*.04; p.vy += (Math.random()-.5)*.04; p.vx *= .98; p.vy *= .98;
+        p.x = (p.x + p.vx + W) % W; p.y = (p.y + p.vy + H) % H;
+        const a = .3 + .7 * Math.abs(Math.sin(t/700*p.s + p.ph));
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*5);
+        g.addColorStop(0, `rgba(255,248,170,${a})`); g.addColorStop(1, "rgba(255,248,170,0)");
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r*5, 0, 6.3); ctx.fill(); break; }
+      case "leaves": {
+        p.y += p.vy; p.x += Math.sin(t/900 + p.ph) * .7; p.rot += p.vr;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        ctx.fillStyle = `hsla(${p.h},90%,58%,.8)`; ctx.beginPath(); ctx.ellipse(0, 0, p.r, p.r*.5, 0, 0, 6.3); ctx.fill();
+        ctx.restore(); if (p.y > H + 20) parts[i] = spawn(false); break; }
+      case "sparks": {
+        p.y += p.vy; p.x += Math.sin(t/500 + p.ph) * .3; p.life -= .004;
+        ctx.fillStyle = `rgba(255,215,110,${Math.max(p.life,0)})`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.3); ctx.fill();
+        if (p.life <= 0 || p.y < -10) parts[i] = spawn(false); break; }
+      case "snow": {
+        p.y += p.vy; p.x += Math.sin(t/1200 + p.ph) * .4;
+        ctx.fillStyle = "rgba(255,255,255,.9)"; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.3); ctx.fill();
+        if (p.y > H + 10) parts[i] = spawn(false); break; }
+      case "kites": {
+        p.y += p.vy; p.x += p.vx + Math.sin(t/1400 + p.ph) * .5;
+        const r = p.r;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(Math.sin(t/800 + p.ph) * .25); ctx.globalAlpha = .8;
+        ctx.fillStyle = p.c; ctx.beginPath(); ctx.moveTo(0,-r); ctx.lineTo(r*.75,0); ctx.lineTo(0,r*1.1); ctx.lineTo(-r*.75,0); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,.8)"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0,-r); ctx.lineTo(0,r*1.1); ctx.moveTo(-r*.75,0); ctx.lineTo(r*.75,0); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, r*1.1); ctx.quadraticCurveTo(r*.6*Math.sin(t/300+p.ph), r*1.8, 0, r*2.6); ctx.stroke();
+        ctx.restore(); if (p.y < -80 || p.x < -80 || p.x > W + 80) parts[i] = spawn(false); break; }
+      case "hearts": {
+        p.y += p.vy; p.x += Math.sin(t/1000 + p.ph) * .4;
+        ctx.fillStyle = `rgba(${p.c},${.45 + p.s*.4})`; heart(p.x, p.y, p.r);
+        if (p.y < -30) parts[i] = spawn(false); break; }
+      case "holi": {
+        p.life -= .0025; p.r += .25;
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        g.addColorStop(0, `rgba(${p.c},${Math.max(p.life,0)*.35})`); g.addColorStop(1, `rgba(${p.c},0)`);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.3); ctx.fill();
+        if (p.life <= 0) parts[i] = spawn(false); break; }
+    }
+  });
+}
+function loop(t){ drawFrame(t); requestAnimationFrame(loop); }
+addEventListener("resize", resize);
+resize();
+
+/* ---------- issue ---------- */
+function renderIssue(){
+  document.documentElement.style.setProperty("--tint", cur.tint);
+  $("#brand").textContent = "Lioness Letters · No. " + noOf(cur);
+  $("#cNo").textContent = "No. " + noOf(cur);
+  $("#cMonth").textContent = cur.month + " " + cur.year;
+  $("#cLine").textContent = cur.cover;
+  $("#cQuote").textContent = cur.quote;
+  setMood(store.get("ll-mood-" + cur.key), false);
+  renderTiles(); resetCookie(); renderDoc(); renderJar(); renderFinale();
+  setSeason(cur.season);
+}
+
+/* ---------- boot ---------- */
+renderIssue();
+go(0);
+showGate();
+if (!reduceMotion) requestAnimationFrame(loop);
+</script>
+</body>
+</html>
